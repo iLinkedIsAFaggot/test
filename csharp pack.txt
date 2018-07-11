@@ -1,0 +1,71 @@
+System.Diagnostics;:
+open web browser tab:
+Process.Start("webbrowsernamehere", "link");
+;:
+System.Net;:
+send mail (Net.Mail):
+MailMessage mail = new MailMessage("sender email", "reciever email", "subject", "body"; //instantiates a new instance of the 'MailMessage' class
+SmtpClient client = new SmtpClient("smtp.gmail.com"); //this client only works for gmail since its smtp.gmail.com, if your gonna use anything else its fairly simple to find this client thing.
+
+client.EnableSsl = true; //gmail requires enablessl to be on, this might be different for you depending on the host (gmail, yahoo etc.)
+client.Port = 587; //gmail email sending port, yet again this will be different for each individual host
+client.Credentials = NetworkCredential("sender email", "sender email password");
+
+client.Send(mail); //sends the email
+
+get slightly faster download speeds for webclients:
+WebClient client = new WebClient(); //instantiates a new instance of the 'WebClient' class
+client.Proxy = GlobalProxySelection.GetEmptyWebProxy(); //creates new empty proxy
+;:
+Import and attribute stuff;:
+draggable form control:
+in class;
+public const int WM_NCLBUTTONDOWN = 0xA1;
+public const int HT_CAPTION = 0x2;
+
+[DllImportAttribute("user32.dll")]
+public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+[DllImportAttribute("user32.dll")]
+public static extern bool ReleaseCapture();
+on form mouse_down event;
+if (e.Button == MouseButtons.Left)
+{
+   ReleaseCapture();
+   SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+}
+;:
+Microsoft.Win32;:
+get HWID (wrapped in a string for this example):
+        public static string GetHWID()
+        {
+            RegistryKey localMachineX64View = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+            RegistryKey rk = localMachineX64View.OpenSubKey(@"SOFTWARE\Microsoft\Cryptography");
+
+            object hwid = rk.GetValue("MachineGuid");
+            return hwid.ToString();
+        }
+
+get key value (wrapped in a string for this example):
+        public static string GetKeyValue(string subkey, string keyName)
+        {
+            RegistryKey localMachineX64View = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+            RegistryKey rk = localMachineX64View.OpenSubKey(subkey);
+
+            object key = rk.GetValue(keyName);
+            return key.ToString();
+        }
+;:
+System.Security.Cryptography (and stuff like that);:
+get md5 hash of application:
+             MD5 md5 = MD5.Create("full path");
+            FileStream stream = File.OpenRead("full path");
+            byte[] hash = md5.ComputeHash(stream);
+            string result = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+
+get hex of plain text:
+            byte[] ba = Encoding.Default.GetBytes(tableName.Text);
+            var hexed = BitConverter.ToString(ba);
+            hexed = hexed.Replace("-", "");
+;:
+Credits;:
+made by iLinked
